@@ -1,28 +1,62 @@
 package app;
 
-import model.dao.DaoFactory;
-import model.dao.TaskDao;
-import model.dao.UserDao;
-import model.entities.Task;
-import model.entities.User;
+import static spark.Spark.get;
+import static spark.Spark.post;
+import static spark.Spark.delete;
+import static spark.Spark.put;
+import static spark.Spark.port;
+import static spark.Spark.stop;
+
+import com.google.gson.Gson;
+
+//import service.CorsFilter;
+import service.TaskService;
+import service.UserService;
 
 public class Aplication {
 
+	
 	public static void main(String[] args) {
 		
-		TaskDao taskDao = DaoFactory.createTaskDao();
-		UserDao userDao = DaoFactory.createUserDao();
+		Gson gson = new Gson();
 		
-		User user1 = new User(2, "Gabigooolll", "8787");
+		UserService userService = new UserService();
+		TaskService taskService = new TaskService();
 		
-		//Task task1 = new Task(11, "Trabalhar", "com Dev", "Andamento", user1);
+		port(3030);
 		
-		//taskDao.findByUser(user1);
-		userDao.insert(user1);
+		//CorsFilter.apply();		
+		get("/user", (req, resp) -> {
+			return  gson.toJson(userService.findUser(req, resp));
+			});
+		
+		post("/user", (req, resp) -> {
+			userService.insertUser(req, resp);
+			return "ok";
+		});
 		
 		
-		//System.out.println(userDao.find(user1));
-
-	}
-
+		get("/task", (req, resp) -> {
+			return gson.toJson(taskService.findUserTasks(req, resp));
+		});
+		
+		post("/task", (req, resp)->{
+			taskService.insertTask(req, resp);
+			return "ok";
+		});
+		
+		delete("/task/:id", (req, resp) -> {
+			taskService.deleteTask(req, resp);
+			return "ok";
+		});
+		
+		put("/task/:id", (req, resp) -> {
+			taskService.updateTask(req, resp);
+			return "ok";
+		});
+		
+		//stop();
+        
+        //System.exit(0);
+	} 
 }
