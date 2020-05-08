@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.0/css/bootstrap-grid.min.css"
+    integrity="sha256-WBDx7S6To0tYc317C5kfFzEKk5AQXATxm3QsTyKo0Jw=" crossorigin="anonymous" />
+  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+      integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+  <header class="header-page">
+    <div class="header-logo">
+      <img src="../images/logo.jpeg" alt="logo">
+    </div>
+    <div class="header-profile">
+      <p class="nome-profile">
+        Breno Xavier
+      </p>
+      <img src="../images//profile.png" alt="logo">
+    </div>
+  </header>
+  <main id="app">
+    <section id="task-list">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-4">
+            <input type="text" class="input-pesquisa" placeholder="Pesquisar tarefa">
+              <i class="fa fa-search"></i>
+            </input>
+          </div>
+            <div class="col-sm-8 d-flex justify-content-end">
+              <button class="w-auto add-button" @click="addModal = true"><i class="fa fa-plus"></i> <p class="add-text">Adicionar</p></button>
+            </div>
+        </div>
+
+        <div class="row task-list">
+          <div class="col-12 title-task-container">
+            <h2>Tarefas</h2>
+          </div>
+
+          <div class="tasks">
+            <div class="col-12">
+              <div class="task" v-for="(item, index) in tasks" :key="index">
+                <div class="task-id" style="display:none;">{{item.j}}</div>
+                <div class="task-status (item)">{{item.status}}</div>
+                <div class="task-nome">Tarefa: {{item}}</div>
+                <div class="task-modify">
+                  <div class="task-edit" @click="modalModify = true"><i class="fa fa-edit"></i></div>
+                  <div class="task-delete" ><i class="fa fa-remove"></i></div>
+                </div>
+                <div class="task-desc" style="display:none;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="modalAdd" v-if="addModal">
+      <div class="fundo" @click="addModal = false"></div>
+      <div class="modal">
+        <div class="input-group">
+          <label>Titulo: </label>
+          <input type="text">
+        </div>
+        <div class="input-group">
+          <label>Descrição: </label>
+          <textarea></textarea>
+        </div>
+
+        <button>Adicionar Tarefa</button>
+      </div>
+    </div>  
+
+    <div class="modalModify" v-if="modalModify">
+      <div class="fundo" @click="modalModify = false"></div>
+      <div class="modal">
+        <div class="input-group">
+          <label>Titulo: </label>
+          <input type="text">
+        </div>
+
+        <div class="input-group">
+          <label>Descrição: </label>
+          <textarea></textarea>
+        </div>
+
+        <button @click="modalModify = false">Modificar Tarefa</button>
+      </div>
+    </div>  
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="../js/index.js"></script>
+</body>
+
+</html>

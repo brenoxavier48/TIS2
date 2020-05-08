@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.0/css/bootstrap-grid.min.css" integrity="sha256-WBDx7S6To0tYc317C5kfFzEKk5AQXATxm3QsTyKo0Jw=" crossorigin="anonymous" />
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <section id="login">
+    <div class="container h-100">
+      <div class="row h-100">
+        <div class="col-sm-12 h-100 d-flex justify-content-center align-items-center">
+          <form class="cadastro">
+            <img src="../images/logo.jpeg" alt="">
+
+            <div class="input-group">
+              <label for="">Username:</label>
+              <input type="text">
+            </div>
+
+            <div class="input-group">
+              <label for="">E-mail:</label>
+              <input type="text">
+            </div>
+
+            <div class="input-group">
+              <label for="">Senha:</label>
+              <input type="password">
+            </div>
+
+            <div class="input-group">
+              <label for="">Nome:</label>
+              <input type="text">
+            </div>
+
+            <div class="row">
+              <div class="col-sm-12 d-flex justify-content-end">
+               <p>Já possui conta? <a href="login.html">Entrar</a></p>
+              </div>
+            </div>
+            <!-- //
+
+              var kole = document.querySelectorAll('.task-delete')
+
+
+              document.querySelectorAll('.task-delete').forEach((el, index)=>{
+              el.addEventListener('click', (e) => {
+                  var element = e.target == 'task-delete' ? e.target : kole[index]
+                  console.log(index)
+                  console.log(element)
+                  console.log(e.target)
+                  element.parentElement.parentElement.remove()
+          
+              })
+          })
+
+          document.querySelectorAll('.task')[0].style.display = document.querySelectorAll('.task-delete')[0].style.display == 'none' ? '' : 'none'
+        
+        -->
+            <script src="https://unpkg.com/vue/dist/vue.js"></script>
+            <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+            <button>Cadastro</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</body>
+</html>
