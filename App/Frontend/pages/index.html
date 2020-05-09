@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>DevWorthy</title>
   <link rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.0/css/bootstrap-grid.min.css"
     integrity="sha256-WBDx7S6To0tYc317C5kfFzEKk5AQXATxm3QsTyKo0Jw=" crossorigin="anonymous" />
@@ -13,89 +13,181 @@
   <link rel="stylesheet" href="../css/style.css">
 </head>
 
-<body>
-  <header class="header-page">
-    <div class="header-logo">
-      <img src="../images/logo.jpeg" alt="logo">
-    </div>
-    <div class="header-profile">
-      <p class="nome-profile">
-        Breno Xavier
-      </p>
-      <img src="../images//profile.png" alt="logo">
-    </div>
-  </header>
-  <main id="app">
-    <section id="task-list">
-      <div class="container">
-        <div class="row">
-          <div class="col-sm-4">
-            <input type="text" class="input-pesquisa" placeholder="Pesquisar tarefa">
-              <i class="fa fa-search"></i>
-            </input>
-          </div>
-            <div class="col-sm-8 d-flex justify-content-end">
-              <button class="w-auto add-button" @click="addModal = true"><i class="fa fa-plus"></i> <p class="add-text">Adicionar</p></button>
-            </div>
+<body >
+  <section id="app">
+
+    <section id="home-page" v-if="homePage">
+      <header class="header-page">
+        <div class="header-logo">
+          <img src="../images/logo.jpeg" alt="logo">
         </div>
-
-        <div class="row task-list">
-          <div class="col-12 title-task-container">
-            <h2>Tarefas</h2>
+        <div class="header-profile">
+          <p class="nome-profile">
+            
+          </p>
+          <img src="../images//profile.png" alt="logo">
+          <div class="profile-signout" @click="signout">
+            <i class="fa fa-sign-out"></i>
           </div>
+        </div>
+      </header>
 
-          <div class="tasks">
-            <div class="col-12">
-              <div class="task" v-for="(item, index) in tasks" :key="index">
-                <div class="task-id" style="display:none;">{{item.j}}</div>
-                <div class="task-status (item)">{{item.status}}</div>
-                <div class="task-nome">Tarefa: {{item}}</div>
-                <div class="task-modify">
-                  <div class="task-edit" @click="modalModify = true"><i class="fa fa-edit"></i></div>
-                  <div class="task-delete" ><i class="fa fa-remove"></i></div>
+      <main>
+        <section id="task-list">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-4">
+                <input type="text" class="input-pesquisa" placeholder="Pesquisar tarefa" v-on:keyup="search">
+                  <i class="fa fa-search"></i>
+                </input>
+              </div>
+                <div class="col-sm-8 d-flex justify-content-end">
+                  <button class="w-auto add-button" @click="addModal = true">
+                    <i class="fa fa-plus"></i> 
+                    <p class="add-text">Adicionar</p>
+                  </button>
                 </div>
-                <div class="task-desc" style="display:none;"></div>
+            </div>
+    
+            <div class="row task-list">
+              <div class="col-12 title-task-container">
+                <h2>Tarefas</h2>
+              </div>
+              <div class="tasks">
+                <div class="col-12">
+                  <div class="task" v-for="(item, index) in tasks" :key="index">
+                    <div class="task-id" style="display:none;">{{item.id}}</div>
+                    <div class="task-status" :style="item.statusColor">{{item.status}}</div>
+                    <div class="task-nome">{{item.nome}}</div>
+                    <div class="task-modify">
+                      <div class="task-edit" 
+                            @click="()=>{ openModal(item.id, item.nome, item.descricao, item.status) }" >
+
+                        <i class="fa fa-edit"></i>
+                      </div>
+                      <div class="task-delete" @click="()=>{ deleteTask(item.id) }"><i class="fa fa-remove"></i></div>
+                    </div>
+                    <div class="task-desc" style="display:none;">{{item.descricao}}</div>
+                  </div>
+                </div>
               </div>
             </div>
+          </div>
+        </section>
+    
+        <div class="modalAdd" v-if="addModal">
+          <div class="fundo" @click="addModal = false" ></div>
+          <div class="modal">
+            <div class="input-group">
+              <label>Titulo: </label>
+              <input type="text" id="titulo-modal-add" maxlength="32">
+            </div>
+            <div class="input-group">
+              <label>Status: </label>
+              <select name="status-modal-add" id="status-modal-add">
+                <option value="Andamento">Andamento</option> 
+                <option value="Concluído">Concluído</option>
+                <option value="Atrasado">Atrasado</option>
+              </select>
+            </div>
+            <div class="input-group">
+              <label>Descrição: </label>
+              <textarea id="desc-modal-add" maxlength="250"></textarea>
+            </div>
+            <button @click="addTask">Adicionar Tarefa</button>
+          </div>
+        </div>  
+    
+        <div class="modalModify" v-if="modalModify">
+          <div class="fundo" @click="modalModify = false"></div>
+          <div class="modal">
+            <div id="id-modal-modify" style="display:none;"></div>
+            <div class="input-group">
+              <label>Titulo: </label>
+              <input type="text" id="titulo-modal-modify" maxlength="32">
+            </div>
+            <div class="input-group">
+              <label>Status: </label>
+              <select name="status-modal-modify" id="status-modal-modify">
+                <option value="Andamento">Andamento</option> 
+                <option value="Concluído">Concluído</option>
+                <option value="Atrasado">Atrasado</option>
+              </select>
+            </div>
+            <div class="input-group">
+              <label>Descrição: </label>
+              <textarea id="desc-modal-add" maxlength="250"></textarea>
+            </div>
+            <button @click="updateTask">Modificar Tarefa</button>
+          </div>
+        </div>  
+      </main>
+    </section>
+
+    <section id="login" v-if="loginPage">
+      <div class="container h-100">
+        <div class="row h-100">
+          <div class="col-sm-12 h-100 d-flex justify-content-center align-items-center">
+            <form>
+              <img src="../images/logo.jpeg" alt="">
+              <div class="input-group">
+                <label for="">Username:</label>
+                <input type="text" id="username-login" maxlength="32">
+              </div>
+              <div class="input-group">
+                <label for="">Senha:</label>
+                <input type="password" id="senha-login" maxlength="18">
+              </div>
+              <div class="row">
+                <div class="col-sm-12 d-flex justify-content-end">
+                 <p>Não possui conta? <a href="#" @click="loginPage = false; cadastroPage = true">Cadastre-se</a></p>
+                </div>
+              </div>
+              <button @click="login">Login</button>
+            </form>
           </div>
         </div>
       </div>
     </section>
 
-    <div class="modalAdd" v-if="addModal">
-      <div class="fundo" @click="addModal = false"></div>
-      <div class="modal">
-        <div class="input-group">
-          <label>Titulo: </label>
-          <input type="text">
+    <section id="login" v-if="cadastroPage">
+      <div class="container h-100">
+        <div class="row h-100">
+          <div class="col-sm-12 h-100 d-flex justify-content-center align-items-center">
+            <form class="cadastro">
+              <img src="../images/logo.jpeg" alt="">
+  
+              <div class="input-group">
+                <label for="">Username:</label>
+                <input type="text" id="username-cadastro" maxlength="32">
+              </div>
+              <div class="input-group">
+                <label for="">E-mail:</label>
+                <input type="text">
+              </div>
+              <div class="input-group">
+                <label for="">Senha:</label>
+                <input type="password" id="senha-cadastro"  maxlength="18">
+              </div>
+              <div class="input-group">
+                <label for="">Nome:</label>
+                <input type="text">
+              </div>
+              <div class="row">
+                <div class="col-sm-12 d-flex justify-content-end">
+                 <p>Já possui conta? <a href="#" @click="loginPage = true; cadastroPage = false">Entrar</a></p>
+                </div>
+              </div>
+              
+              <button @click="cadastro">Cadastro</button>
+            </form>
+          </div>
         </div>
-        <div class="input-group">
-          <label>Descrição: </label>
-          <textarea></textarea>
-        </div>
-
-        <button>Adicionar Tarefa</button>
       </div>
-    </div>  
+    </section>
 
-    <div class="modalModify" v-if="modalModify">
-      <div class="fundo" @click="modalModify = false"></div>
-      <div class="modal">
-        <div class="input-group">
-          <label>Titulo: </label>
-          <input type="text">
-        </div>
 
-        <div class="input-group">
-          <label>Descrição: </label>
-          <textarea></textarea>
-        </div>
-
-        <button @click="modalModify = false">Modificar Tarefa</button>
-      </div>
-    </div>  
-  </main>
-
+  </section>
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script src="../js/index.js"></script>
 </body>

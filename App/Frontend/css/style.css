@@ -6,7 +6,11 @@
   box-sizing: border-box;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
+/* rgb(255, 255, 255) */
 
+body{
+  background-color: #F9F2F9; 
+}
 
 a {
   text-decoration: none;
@@ -25,6 +29,7 @@ form {
   width: 90%;
   max-width: 400px;
   padding: 25px 25px;
+  background: rgb(255, 255, 255);
   box-shadow: 0px 0px 3px 1px rgba(0, 0, 0, 0.3);
   border-radius: 5px;
 }
@@ -33,7 +38,7 @@ form {
   max-width: 500px;
 }
 
-input, textarea {
+input, textarea, select, option {
   width: 100%;
   height: 40px;
   border-radius: 5px;
@@ -44,8 +49,9 @@ input, textarea {
   padding: 0px 15px;
 }
 
+
 input:focus, textarea:focus {
-  box-shadow: 0px 0px 3px 1px rgba(119, 0, 255, 0.308);
+  box-shadow: 0px 0px 3px 1px rgb(173, 228, 224);;
 }
 
 .input-pesquisa{
@@ -66,7 +72,7 @@ button {
   font-weight: 400;
   color: #fff;
   border-radius: 5px;
-  background: rgb(119, 0, 255);
+  background: rgb(53, 184, 175);
   cursor: pointer;
   margin: 15px 0px;
 }
@@ -93,6 +99,7 @@ button {
 
 #task-list .container{
   margin-top: 70px;
+  margin-bottom: 70px;
 }
 
 .w-auto {
@@ -109,12 +116,13 @@ button {
   width: 100%;
   overflow: auto;
   max-height: 700px;
+  border-bottom: 1px solid rgba(8, 8, 8, 0.09);
 }
 
 .task {
   width: 100%;
   height: 50px;
-  background: #F2F2F2;
+  background: rgb(255, 255, 255);
   box-shadow: 1px 3px 2px 0px rgba(0, 0, 0, 0.25), inset 1px 1px 2px rgba(0, 0, 0, 0.1);
   padding: 5px 15px;
   border-radius: 7px;
@@ -148,7 +156,7 @@ button {
 
 .task-delete:hover{
   background-color: #a7a7a7;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.25);
   cursor: pointer;
 }
 
@@ -164,7 +172,23 @@ button {
 
 .task-edit:hover{
   background-color: #a7a7a7;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+}
+
+.profile-signout{
+  height: 68%;
+  width: 18%;
+  border-radius: 50%;
+  transition: 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-signout:hover{
+  background-color: #a7a7a7;
+  box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.25);
   cursor: pointer;
 }
 
@@ -179,24 +203,6 @@ button {
   justify-content: center;
   font-size: 16px;
   font-weight: bold;
-}
-
-.task-status .concluido{
-  background-color: #0FCB87;
-}
-/* //import static spark.Spark.get;
-//import static spark.Spark.post;
-//import static spark.Spark.delete;
-//import static spark.Spark.put;
-//import static spark.Spark.port;
-//import static spark.Spark.stop; */
-
-.task-status .atrasado{
-  background-color: #ff0000;;
-}    
-
-.task-status .andamento{
-  background-color: #C7CB0F
 }
 
 .task-nome{
@@ -261,8 +267,7 @@ button {
 .header-page{
   height: 60px;
   width: 100%;
-  /* background-color: rgb(119, 0, 255);
-  color: white; */;
+  background: rgb(255, 255, 255);
   display: flex;
   align-content: center;
   justify-content: space-between;
@@ -303,6 +308,6 @@ button {
 ::-webkit-scrollbar-thumb {
   -webkit-border-radius: 10px;
   border-radius: 10px;
-  background: rgb(119, 0, 255);; 
+  background: rgb(53, 184, 175); 
   /* -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);  */
 }
