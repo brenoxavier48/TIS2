@@ -53,6 +53,7 @@ public class TaskDaoJDBC implements TaskDao{
 				DB.closeResultSet(rs);
 			}else{
 				throw new DbException("Unexpected error! No rows affected!");
+				
 			}
 			
 		}catch(SQLException e){

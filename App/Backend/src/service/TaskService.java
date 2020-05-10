@@ -18,14 +18,14 @@ public class TaskService {
 		taskDao = DaoFactory.createTaskDao();
 		
 		User user = new User();
-		user.setId(Integer.parseInt(req.queryParams("id")));
+		user.setId(Integer.parseInt(req.queryParams("userid")));
 		
 		List<Task> listReturn = taskDao.findByUser(user);
 		
 		return listReturn;	
 	}
 	
-	public void insertTask(Request req, Response resp){
+	public int insertTask(Request req, Response resp){
 		
 		taskDao = DaoFactory.createTaskDao();
 		
@@ -42,6 +42,7 @@ public class TaskService {
 		taskDao.insert(task);
 		
 		resp.status(201);
+		return task.getId();
 	}
 	
 	public void deleteTask(Request req, Response resp){
