@@ -9,7 +9,7 @@ import static spark.Spark.stop;
 
 import com.google.gson.Gson;
 
-//import service.CorsFilter;
+import service.CorsFilter;
 import service.TaskService;
 import service.UserService;
 
@@ -25,7 +25,7 @@ public class Aplication {
 		
 		port(3030);
 		
-		//CorsFilter.apply();		
+		CorsFilter.apply();		
 		get("/user", (req, resp) -> {
 			return  gson.toJson(userService.findUser(req, resp));
 			});
@@ -41,16 +41,15 @@ public class Aplication {
 		});
 		
 		post("/task", (req, resp)->{
-			taskService.insertTask(req, resp);
-			return "ok";
+			return gson.toJson(taskService.insertTask(req, resp));
 		});
 		
-		delete("/task/:id", (req, resp) -> {
+		get("/task/:id", (req, resp) -> {
 			taskService.deleteTask(req, resp);
 			return "ok";
 		});
 		
-		put("/task/:id", (req, resp) -> {
+		post("/task/:id", (req, resp) -> {
 			taskService.updateTask(req, resp);
 			return "ok";
 		});

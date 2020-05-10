@@ -245,7 +245,7 @@ const Config = {
 
                 Config.connBack.request.onload = ()=>{
 
-                    objTask.id = Number(Config.connBack.request.response);
+                    objTask.id = Number(taskId);
                     objTask.nome = titulo;
                     objTask.descricao = desc;
                     objTask.status = status;
