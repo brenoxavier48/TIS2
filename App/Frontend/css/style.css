@@ -237,6 +237,7 @@ button {
   left: 50%;
   padding: 30px;
   transform: translate(-50%, -50%);
+  z-index: 99;
 }
 
 .description {
@@ -310,4 +311,36 @@ button {
   border-radius: 10px;
   background: rgb(53, 184, 175); 
   /* -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);  */
+}
+
+.slider {
+  width: 50%;
+  height: 100vh;
+  position: absolute;
+  right: 0%;
+  top: 0;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  padding: 30px;
+  background-color: #fff;
+  animation: showModal .2s ease;
+  animation-play-state: paused;
+}
+
+.showModal {
+  animation-play-state: running;
+}
+
+@keyframes showModal {
+  0% { 
+    right: -50%;
+  }
+
+  100% {
+    right: 0%;
+  }
+}
+
+.tasks {
+  overflow-x: hidden;
 }

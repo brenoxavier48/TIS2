@@ -93,8 +93,5 @@ public class Task implements Serializable{
 		return "Task [id=" + id + ", nome=" + nome + ", descricao=" + descricao + ", status=" + status + ", user="
 				+ user + "]";
 	}
-	
-	
-	
 
 }
