@@ -13,6 +13,7 @@ import java.util.Map;
 import db.DB;
 import db.DbException;
 import model.dao.TaskDao;
+import model.entities.Project;
 import model.entities.Task;
 import model.entities.User;
 
@@ -40,7 +41,7 @@ public class TaskDaoJDBC implements TaskDao{
 			st.setString(1, obj.getNome());
 			st.setString(2, obj.getDescricao());
 			st.setString(3, obj.getStatus());
-			st.setInt(4, obj.getUser().getId());
+			st.setInt(4, obj.getProject().getId());
 			
 			int rowsAffected = st.executeUpdate();
 			
@@ -79,7 +80,7 @@ public class TaskDaoJDBC implements TaskDao{
 			st.setString(1, obj.getNome());
 			st.setString(2, obj.getDescricao());
 			st.setString(3, obj.getStatus());
-			st.setInt(4, obj.getUser().getId());
+			st.setInt(4, obj.getProject().getId());
 			st.setInt(5, obj.getId());
 			
 			st.executeUpdate();
@@ -119,7 +120,7 @@ public class TaskDaoJDBC implements TaskDao{
 	}
 
 	@Override
-	public List<Task> findByUser(User user) {
+	public List<Task> findByProject(Project project) {
 		
 		PreparedStatement st = null;
 		ResultSet rs = null;
@@ -134,7 +135,7 @@ public class TaskDaoJDBC implements TaskDao{
 					+"ORDER BY Nome "
 					);
 			
-			st.setInt(1, user.getId());
+			st.setInt(1, project.getId());
 			
 			rs = st.executeQuery();
 			
@@ -144,13 +145,13 @@ public class TaskDaoJDBC implements TaskDao{
 			while(rs.next()){
 				
 				User userReturn = map.get(rs.getInt("UserId"));
-				
+				Project projectReturn = null;//map.get(rs.getInt("UserId"));
 				if(userReturn == null){
 					userReturn = instanciateUser(rs);
 					map.put(rs.getInt("UserId"), userReturn);
 				}
 				
-				Task objtask = instanciateTask(rs, userReturn);
+				Task objtask = instanciateTask(rs, projectReturn);
 				list.add(objtask);
 			}
 			
@@ -165,14 +166,14 @@ public class TaskDaoJDBC implements TaskDao{
 		}
 	}
 	
-	private Task instanciateTask(ResultSet rs, User user) throws SQLException {
+	private Task instanciateTask(ResultSet rs, Project project) throws SQLException {
 
 		Task obj = new Task();
 		obj.setId(rs.getInt("Id"));
 		obj.setNome(rs.getString("Nome"));
 		obj.setDescricao(rs.getString("Descricao"));
 		obj.setStatus(rs.getString("Status"));
-		obj.setUser(user);
+		obj.setProject(project);
 		
 		return obj;
 	}
