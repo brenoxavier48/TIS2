@@ -349,7 +349,6 @@
         document.querySelector('#status-modal-modify').value = status;
         document.querySelector('#desc-modal-add').value = descricao;
         document.querySelector('#id-modal-modify').innerHTML = taskId;
-
       }, 10);
     }
   }
@@ -368,6 +367,8 @@ const init = {
       deleteTask: Config.bindEvents.bindDeleteTask,
       updateTask: Config.bindEvents.bindUpdateTask,
       openModal: Config.util.openModalModify,
+      modalModifyTaskAdd: false,
+      modalModifyTask: 'Modificar'  ,
       user: { id: null, nome: null, senha: null },
       //adicionei esse objeto currentProject para facilitar na hora de pegar os dados do projeto atual e não ter que ficar
       //passando parametro em função toda hora.
@@ -394,10 +395,21 @@ const init = {
       },],
       addModal: false,
       modalModify: false,
-      loginPage: true,
+      viewTaskData: false,
+      loginPage: false,
       cadastroPage: false,
       homePage: true,
       showViewInfoModal: false,
+    },
+
+    watch: {
+      modalModifyTaskAdd() {
+        if (this.modalModifyTaskAdd == true) {
+          this.modalModifyTask = 'Adicionar';
+        } else {
+          this.modalModifyTask = 'Modificar';
+        }
+      }
     },
 
     methods: {
@@ -411,10 +423,9 @@ const init = {
         });
 
         this.currentProject = arr[0];
-
-
       },
-    }
+
+    },
   }),
 }
 

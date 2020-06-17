@@ -36,7 +36,7 @@
           <div class="container">
             <div class="row">
               <div class="col-sm-4">
-                <input type="text" class="input-pesquisa" placeholder="Pesquisar tarefa" v-on:keyup="search">
+                <input type="text" class="input-pesquisa" placeholder="Pesquisar projeto" v-on:keyup="search">
                   <i class="fa fa-search"></i>
                 </input>
               </div>
@@ -98,6 +98,14 @@
               <div class="col-sm-12">
                 <h2>Tarefas</h2>
                 <br>
+
+                <button
+                  class="task-add" 
+                  @click="openModal('', '', ''); modalModifyTaskAdd = true" 
+                >
+                  <i class="fa fa-plus"></i>Adicionar
+                </button>
+
                 <div class="tasks">
                   <div class="row" v-for="(item, index) in currentProject.subtasks">
                     <div class="col-sm-3">
@@ -112,13 +120,19 @@
                     
                     <div class="col-sm-3">
                       <div class="row">
+                        <div 
+                          class="task-edit"
+                          @click="viewTaskData = true"
+                        >
+                          <i class="fa fa-eye"></i>
+                        </div>
                         <!--A botão de edit task está chamando o mesmo modal de editar projeto, recomendo passar um parametro nessa 
                         funçao para identificar se está editando uma tarefa ou um projeto. Na função que você está fazendo o request 
                         tu verifica se ta editando uma tarefa ou um projeto e dai tu define a rota. Bem simples! 
                         -->
                         <div 
                           class="task-edit" 
-                          @click="openModal(item.id, item.nome, item.descricao, item.status)" 
+                          @click="openModal(item.id, item.nome, item.descricao, item.status); modalModifyTaskAdd = false" 
                         >
 
                           <i class="fa fa-edit"></i>
@@ -139,6 +153,43 @@
             </div>
           </div>
         </div>
+
+        <div class="modalAdd" v-if="viewTaskData">
+          <div class="fundo" @click="viewTaskData = false" ></div>
+          <div class="modal">
+            <div class="input-group">
+              <label>Titulo: </label>
+              <input type="text" id="titulo-modal-add" maxlength="32" disabled>
+            </div>
+
+            <div class="input-group">
+              <label>Responsável: </label>
+              <input type="text" id="responsavel" disabled>
+            </div>
+
+            <div class="input-group">
+              <label>Status: </label>
+              <select name="status-modal-add" id="status-modal-add" disabled>
+                <option value="Andamento">Andamento</option> 
+                <option value="Concluído">Concluído</option>
+                <option value="Atrasado">Atrasado</option>
+                <option value="Aguardando retorno">Aguardando retorno</option>
+              </select>
+            </div>
+
+            <div class="input-group">
+              <label>Descrição: </label>
+              <textarea id="desc-modal-add" maxlength="250" readonly></textarea>
+            </div>
+
+            <div class="input-group">
+              <label>Comentário: </label>
+              <textarea id="desc-modal-add" maxlength="250"></textarea>
+            </div>
+
+            <button @click="">Adicionar comentario</button>
+          </div>
+        </div>  
     
         <div class="modalAdd" v-if="addModal">
           <div class="fundo" @click="addModal = false" ></div>
@@ -152,6 +203,7 @@
               <select name="status-modal-add" id="status-modal-add">
                 <option value="Andamento">Andamento</option> 
                 <option value="Concluído">Concluído</option>
+                <option value="Aguardando retorno">Aguardando retorno</option>
                 <option value="Atrasado">Atrasado</option>
               </select>
             </div>
@@ -159,7 +211,7 @@
               <label>Descrição: </label>
               <textarea id="desc-modal-add" maxlength="250"></textarea>
             </div>
-            <button @click="addTask">Adicionar Tarefa</button>
+            <button @click="addTask">Adicionar Projeto</button>
           </div>
         </div>  
     
@@ -171,19 +223,26 @@
               <label>Titulo: </label>
               <input type="text" id="titulo-modal-modify" maxlength="32">
             </div>
+
+            <div class="input-group">
+              <label>Responsável: </label>
+              <input type="text" id="responsavel">
+            </div>
+
             <div class="input-group">
               <label>Status: </label>
               <select name="status-modal-modify" id="status-modal-modify">
                 <option value="Andamento">Andamento</option> 
                 <option value="Concluído">Concluído</option>
                 <option value="Atrasado">Atrasado</option>
+                <option value="Aguardando retorno">Aguardando retorno</option>
               </select>
             </div>
             <div class="input-group">
               <label>Descrição: </label>
               <textarea id="desc-modal-add" maxlength="250"></textarea>
             </div>
-            <button @click="updateTask">Modificar Tarefa</button>
+            <button @click="updateTask">{{modalModifyTask}} Tarefa</button>
           </div>
         </div>  
       </main>
