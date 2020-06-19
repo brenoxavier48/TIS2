@@ -7,7 +7,7 @@ import model.entities.Task;
 
 public interface TaskDao {
 
-	void insert(Task obj);
+	int insert(Task obj);
 	void update(Task obj);
 	void deleteById(Integer id);
 	Task findById(Integer id);

@@ -1,18 +1,21 @@
 package model.dao.impl;
 
-import java.util.List;
-
-import db.DB;
-import db.DbException;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import db.DB;
+import db.DbException;
 import model.dao.ProjectDao;
 import model.entities.Project;
+import model.entities.Task;
+import model.entities.User;
 
 public class ProjectDaoJDBC implements ProjectDao {
 
@@ -23,27 +26,28 @@ public class ProjectDaoJDBC implements ProjectDao {
 	}
 	
 	@Override
-	public void insert(Project project) {
+	public int insert(Project project) {
 		PreparedStatement st = null;
-		
+		int id = 0;
 		try{
 			st = conn.prepareStatement(
 					"INSERT INTO project "
-					+"(Nome, Descricao) "
+					+"(Nome, Descricao, UserId) "
 					+"VALUES "
-					+"(?, ?) ",
+					+"(?, ?, ?) ",
 					Statement.RETURN_GENERATED_KEYS
 					);
 			
 			st.setString(1, project.getNome());
 			st.setString(2, project.getDescricao());
+			st.setInt(3, project.getUser().getId());
 			
 			int rowsAffected = st.executeUpdate();
 			
 			if(rowsAffected > 0){
 				ResultSet rs = st.getGeneratedKeys();
 				if(rs.next()){
-					int id = rs.getInt(1);
+					id = rs.getInt(1);
 					project.setId(id);
 				}
 				DB.closeResultSet(rs);
@@ -57,7 +61,7 @@ public class ProjectDaoJDBC implements ProjectDao {
 		finally{
 			DB.closeStatement(st);
 		}
-
+		return id;
 	}
 
 	@Override
@@ -67,13 +71,13 @@ public class ProjectDaoJDBC implements ProjectDao {
 		try{
 			st = conn.prepareStatement(
 					"UPDATE project "
-					+"SET Nome = ?, Descricao = ?, Status = ?, UserId = ? "
+					+"SET Nome = ?, Descricao = ?"
 					+"WHERE Id = ?"
 					);
 			
 			st.setString(1, project.getNome());
 			st.setString(2, project.getDescricao());
-			st.setInt(5, project.getId());
+			st.setInt(3, project.getId());
 			
 			st.executeUpdate();
 			
@@ -103,12 +107,44 @@ public class ProjectDaoJDBC implements ProjectDao {
 			DB.closeStatement(st);
 		}	
 	}
-
+	
 	@Override
-	public Project findById(Integer id) {
+	public List<Project> findByUser(User user) {
+		
 		PreparedStatement st = null;
+		ResultSet rs = null;
 		
 		try{
+			
+			st = conn.prepareStatement(
+					"SELECT project.*,user.Nome as UserNome "
+					+"FROM project INNER JOIN user "
+					+"ON project.UserId = user.Id "
+					+"WHERE user.Id = ? "
+					+"ORDER BY Nome "
+					);
+			
+			st.setInt(1, user.getId());
+			
+			rs = st.executeQuery();
+			
+			List<Project> list = new ArrayList<>();
+			Map<Integer, User> map = new HashMap<>();
+			
+			while(rs.next()){
+				
+				User userReturn = map.get(rs.getInt("UserId"));
+				Project projectReturn = null;//map.get(rs.getInt("UserId"));
+				if(userReturn == null){
+					userReturn = instanciateUser(rs);
+					map.put(rs.getInt("UserId"), userReturn);
+				}
+				
+				Project objProject = instanciateProject(rs, userReturn);
+				list.add(objProject);
+			}
+			
+			return list;
 			
 		}catch(SQLException e){
 			throw new DbException(e.getMessage());
@@ -118,11 +154,25 @@ public class ProjectDaoJDBC implements ProjectDao {
 			DB.closeResultSet(rs);
 		}
 	}
+	
+	private Project instanciateProject(ResultSet rs, User user) throws SQLException {
 
-	@Override
-	public List<Project> findByUser(Project project) {
-		// TODO Auto-generated method stub
-		return null;
+		Project obj = new Project();
+		obj.setId(rs.getInt("Id"));
+		obj.setNome(rs.getString("Nome"));
+		obj.setDescricao(rs.getString("Descricao"));
+		obj.setUser(user);
+		
+		return obj;
+	}
+	
+	private User instanciateUser(ResultSet rs) throws SQLException {
+		
+		User user = new User();
+		user.setId(rs.getInt("UserId"));
+		user.setNome(rs.getString("UserNome"));
+		
+		return user;
 	}
 
 }

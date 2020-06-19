@@ -26,29 +26,48 @@ public class TaskDaoJDBC implements TaskDao{
 	}
 
 	@Override
-	public void insert(Task obj) {
+	public int insert(Task obj) {
 		PreparedStatement st = null;
-		
+		int id = 0;
 		try{
-			st = conn.prepareStatement(
-					"INSERT INTO task "
-					+"(Nome, Descricao, Status, UserId) "
-					+"VALUES "
-					+"(?, ?, ?, ?) ",
-					Statement.RETURN_GENERATED_KEYS
-					);
 			
-			st.setString(1, obj.getNome());
-			st.setString(2, obj.getDescricao());
-			st.setString(3, obj.getStatus());
-			st.setInt(4, obj.getProject().getId());
+			if(obj.getUser().getId() > 0){
+				
+				st = conn.prepareStatement(
+						"INSERT INTO task "
+								+"(Nome, Descricao, Status, ProjectId, UserId) "
+								+"VALUES "
+								+"(?, ?, ?, ?, ?) ",
+								Statement.RETURN_GENERATED_KEYS
+						);
+				
+				st.setString(1, obj.getNome());
+				st.setString(2, obj.getDescricao());
+				st.setString(3, obj.getStatus());
+				st.setInt(4, obj.getProject().getId());
+				st.setInt(5, obj.getUser().getId());
+				
+			}else{
+				st = conn.prepareStatement(
+						"INSERT INTO task "
+						+"(Nome, Descricao, Status, ProjectId) "
+						+"VALUES "
+						+"(?, ?, ?, ?) ",
+						Statement.RETURN_GENERATED_KEYS
+						);
+				
+				st.setString(1, obj.getNome());
+				st.setString(2, obj.getDescricao());
+				st.setString(3, obj.getStatus());
+				st.setInt(4, obj.getProject().getId());
+			}
 			
 			int rowsAffected = st.executeUpdate();
 			
 			if(rowsAffected > 0){
 				ResultSet rs = st.getGeneratedKeys();
 				if(rs.next()){
-					int id = rs.getInt(1);
+					id = rs.getInt(1);
 					obj.setId(id);
 				}
 				DB.closeResultSet(rs);
@@ -63,7 +82,7 @@ public class TaskDaoJDBC implements TaskDao{
 		finally{
 			DB.closeStatement(st);
 		}
-		
+		return id;
 	}
 
 	@Override
@@ -71,17 +90,35 @@ public class TaskDaoJDBC implements TaskDao{
 		PreparedStatement st = null;
 		
 		try{
-			st = conn.prepareStatement(
-					"UPDATE task "
-					+"SET Nome = ?, Descricao = ?, Status = ?, UserId = ? "
-					+"WHERE Id = ?"
-					);
 			
-			st.setString(1, obj.getNome());
-			st.setString(2, obj.getDescricao());
-			st.setString(3, obj.getStatus());
-			st.setInt(4, obj.getProject().getId());
-			st.setInt(5, obj.getId());
+			if(obj.getUser().getId() > 0){
+				
+				st = conn.prepareStatement(
+						"UPDATE task "
+								+"SET Nome = ?, Descricao = ?, Status = ?, UserId = ? "
+								+"WHERE Id = ?"
+						);
+				
+				st.setString(1, obj.getNome());
+				st.setString(2, obj.getDescricao());
+				st.setString(3, obj.getStatus());
+				st.setInt(4, obj.getUser().getId());
+				st.setInt(5, obj.getId());
+				
+			}else{
+				
+				st = conn.prepareStatement(
+						"UPDATE task "
+								+"SET Nome = ?, Descricao = ?, Status = ? "
+								+"WHERE Id = ?"
+						);
+				
+				st.setString(1, obj.getNome());
+				st.setString(2, obj.getDescricao());
+				st.setString(3, obj.getStatus());
+				st.setInt(4, obj.getId());
+				
+			}
 			
 			st.executeUpdate();
 			

@@ -22,27 +22,28 @@ public class UserDaoJDBC implements UserDao{
 	}
 
 	@Override
-	public void insert(User obj) {
+	public int insert(User obj) {
 		PreparedStatement st = null;
+		int id = 0;
 		
 		try{
-			
 			st = conn.prepareStatement(
 					"INSERT INTO user "
-					+"(Nome, Senha) "
-					+"VALUE (?, ?)",
+					+"(Nome, Senha, Username) "
+					+"VALUE (?, ?, ?)",
 					Statement.RETURN_GENERATED_KEYS
 					);
 			
 			st.setString(1, obj.getNome());
 			st.setString(2, obj.getSenha());
+			st.setString(3, obj.getUserName());
 			
 			int rowsAffected = st.executeUpdate();
 			
 			if(rowsAffected > 0){
 				ResultSet rs = st.getGeneratedKeys();
 				if(rs.next()){
-					int id = rs.getInt(1);
+					id = rs.getInt(1);
 					obj.setId(id);
 				}
 				DB.closeResultSet(rs);
@@ -53,6 +54,7 @@ public class UserDaoJDBC implements UserDao{
 			throw new DbException(e.getMessage());
 			
 		}
+		return id;
 		
 	}
 
@@ -95,6 +97,7 @@ public class UserDaoJDBC implements UserDao{
 		user.setId(rs.getInt("Id"));
 		user.setNome(rs.getString("Nome"));
 		user.setSenha(rs.getString("Senha"));
+		user.setUserName(rs.getString("UserName"));
 		
 		return user;
 	}

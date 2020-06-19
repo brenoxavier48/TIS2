@@ -1,15 +1,13 @@
 package app;
 
 import static spark.Spark.get;
-import static spark.Spark.post;
-import static spark.Spark.delete;
-import static spark.Spark.put;
 import static spark.Spark.port;
-import static spark.Spark.stop;
+import static spark.Spark.post;
 
 import com.google.gson.Gson;
 
 import service.CorsFilter;
+import service.ProjectService;
 import service.TaskService;
 import service.UserService;
 
@@ -22,6 +20,7 @@ public class Aplication {
 		
 		UserService userService = new UserService();
 		TaskService taskService = new TaskService();
+		ProjectService projectService = new ProjectService();
 		
 		port(3030);
 		
@@ -32,7 +31,7 @@ public class Aplication {
 		
 		post("/user", (req, resp) -> {
 			userService.insertUser(req, resp);
-			return "ok";
+			return resp;
 		});
 		
 		
@@ -41,7 +40,8 @@ public class Aplication {
 		});
 		
 		post("/task", (req, resp)->{
-			return gson.toJson(taskService.insertTask(req, resp));
+			taskService.insertTask(req, resp);
+			return resp;
 		});
 		
 		get("/task/:id", (req, resp) -> {
@@ -52,6 +52,25 @@ public class Aplication {
 		post("/task/:id", (req, resp) -> {
 			taskService.updateTask(req, resp);
 			return "ok";
+		});
+		
+		get("user/projects", (req, resp) -> {
+			return gson.toJson(projectService.findUserProjects(req, resp));
+		});
+		
+		post("/project", (req, resp) -> {
+			projectService.insertProject(req, resp);
+			return resp;
+		});
+		
+		get("/project/:id", (req, resp) -> {
+			projectService.deleteProject(req, resp);
+			return resp;
+		});
+		
+		post("/project/:id", (req, resp) -> {
+			projectService.updateProject(req, resp);
+			return resp;
 		});
 		
 		//stop();

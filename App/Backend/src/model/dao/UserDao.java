@@ -8,6 +8,6 @@ import model.entities.User;
 
 public interface UserDao {
 	
-	void insert(User obj);
+	int insert(User obj);
 	User find(User obj);
 }

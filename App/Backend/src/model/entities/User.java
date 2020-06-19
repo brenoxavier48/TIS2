@@ -9,14 +9,16 @@ public class User implements Serializable{
 	private int id;
 	private String nome;
 	private String senha;
+	private String userName;
 	
 	public User(){
 	}
 	
-	public User(int id, String nome, String senha) {
+	public User(int id, String nome, String senha, String userName) {
 		this.id = id;
 		this.nome = nome;
 		this.senha = senha;
+		this.userName = userName;
 	}
 	
 	public int getId() {
@@ -41,6 +43,14 @@ public class User implements Serializable{
 	
 	public void setSenha(String senha) {
 		this.senha = senha;
+	}
+	
+	public String getUserName() {
+		return userName;
+	}
+	
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 	@Override
@@ -67,7 +77,7 @@ public class User implements Serializable{
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", nome=" + nome + ", senha=" + senha + "]";
+		return "User [id=" + id + ", nome=" + nome + ", senha=" + senha + ", userName=" + userName + "]";
 	}
 	
 }
