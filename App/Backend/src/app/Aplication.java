@@ -24,19 +24,15 @@ public class Aplication {
 		
 		port(3030);
 		
-		CorsFilter.apply();		
-		get("/user", (req, resp) -> {
+		CorsFilter.apply();	
+		
+		post("/user/login", (req, resp) -> {
 			return  gson.toJson(userService.findUser(req, resp));
 			});
 		
 		post("/user", (req, resp) -> {
 			userService.insertUser(req, resp);
 			return resp;
-		});
-		
-		
-		get("/task", (req, resp) -> {
-			return gson.toJson(taskService.findUserTasks(req, resp));
 		});
 		
 		post("/task", (req, resp)->{
@@ -54,7 +50,7 @@ public class Aplication {
 			return "ok";
 		});
 		
-		get("user/projects", (req, resp) -> {
+		post("user/projects", (req, resp) -> {
 			return gson.toJson(projectService.findUserProjects(req, resp));
 		});
 		
@@ -63,7 +59,11 @@ public class Aplication {
 			return resp;
 		});
 		
-		get("/project/:id", (req, resp) -> {
+		post("/project/tasks", (req, resp) -> {
+			return gson.toJson(taskService.findProjectTasks(req, resp));
+		});
+		
+		get("/projectdelete/:id", (req, resp) -> {
 			projectService.deleteProject(req, resp);
 			return resp;
 		});

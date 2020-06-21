@@ -134,7 +134,6 @@ public class ProjectDaoJDBC implements ProjectDao {
 			while(rs.next()){
 				
 				User userReturn = map.get(rs.getInt("UserId"));
-				Project projectReturn = null;//map.get(rs.getInt("UserId"));
 				if(userReturn == null){
 					userReturn = instanciateUser(rs);
 					map.put(rs.getInt("UserId"), userReturn);

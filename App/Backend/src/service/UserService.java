@@ -21,7 +21,7 @@ public class UserService {
 		userDao = DaoFactory.createUserDao();
 		
 		User user = gson.fromJson(req.body(), User.class);
-		
+		System.out.println(user);
 		User userReturn = userDao.find(user);
 		
 		if(userReturn != null){
@@ -42,11 +42,12 @@ public class UserService {
 		int id = userDao.insert(user);
 		
 		if(id > 0){
-			resp.body("{'id': '"+id+"'}");
+			resp.body("{\"success\": true, \"id\": \""+id+"\"}");
 			resp.status(201);
 		}
 		else{
-			resp.status(500);
+			resp.body("{\"success\": false}");
+			resp.status(200);
 		}
 	}
 	

@@ -30,7 +30,7 @@ public class TaskDaoJDBC implements TaskDao{
 		PreparedStatement st = null;
 		int id = 0;
 		try{
-			
+			System.out.println(obj.getUser());
 			if(obj.getUser().getId() > 0){
 				
 				st = conn.prepareStatement(
@@ -165,10 +165,10 @@ public class TaskDaoJDBC implements TaskDao{
 		try{
 			
 			st = conn.prepareStatement(
-					"SELECT task.*,user.Nome as UserNome "
-					+"FROM task INNER JOIN user "
-					+"ON task.UserId = user.Id "
-					+"WHERE user.Id = ? "
+					"SELECT task.*,project.Nome as ProjectNome "
+					+"FROM task INNER JOIN project "
+					+"ON task.ProjectId = project.Id "
+					+"WHERE project.Id = ? "
 					+"ORDER BY Nome "
 					);
 			
@@ -177,15 +177,15 @@ public class TaskDaoJDBC implements TaskDao{
 			rs = st.executeQuery();
 			
 			List<Task> list = new ArrayList<>();
-			Map<Integer, User> map = new HashMap<>();
+			Map<Integer, Project> map = new HashMap<>();
 			
 			while(rs.next()){
 				
-				User userReturn = map.get(rs.getInt("UserId"));
-				Project projectReturn = null;//map.get(rs.getInt("UserId"));
-				if(userReturn == null){
-					userReturn = instanciateUser(rs);
-					map.put(rs.getInt("UserId"), userReturn);
+				Project projectReturn = map.get(rs.getInt("ProjectId"));
+				
+				if(projectReturn == null){
+					projectReturn = instanciateProject(rs);
+					map.put(rs.getInt("ProjectId"), projectReturn);
 				}
 				
 				Task objtask = instanciateTask(rs, projectReturn);
@@ -222,6 +222,16 @@ public class TaskDaoJDBC implements TaskDao{
 		user.setNome(rs.getString("UserNome"));
 		
 		return user;
+	}
+	
+	private Project instanciateProject(ResultSet rs) throws SQLException {
+
+		Project obj = new Project();
+		obj.setId(rs.getInt("Id"));
+		obj.setNome(rs.getString("Nome"));
+		obj.setDescricao(rs.getString("Descricao"));
+		
+		return obj;
 	}
 
 }

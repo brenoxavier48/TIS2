@@ -67,10 +67,10 @@ public class UserDaoJDBC implements UserDao{
 		try{
 			st = conn.prepareStatement(
 					"SELECT * FROM user "
-					+"WHERE Nome = ? "
+					+"WHERE Username = ? "
 					+"AND Senha = ? "
 					);
-			st.setString(1, obj.getNome());
+			st.setString(1, obj.getUserName());
 			st.setString(2, obj.getSenha());
 			
 			rs = st.executeQuery();

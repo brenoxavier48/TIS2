@@ -38,15 +38,16 @@ public class ProjectService {
 		
 		User user = new User();
 		user.setId(Integer.parseInt(req.queryParams("userid")));
-		
-		Project project = gson.fromJson(req.body(), Project.class);
-		
+		System.out.println(req.body());
+		Project project = new Project();
+		project = gson.fromJson(req.body(), Project.class);
+		System.out.println(project + " + user: " + user);
 		project.setUser(user);
 		
 		int id = projectDao.insert(project);
 		
 		if(id > 0){
-			resp.body("{'id': '"+id+"'}");
+			resp.body("{\"success\": true , \"id\": \""+id+"\"}");
 			resp.status(201);
 		}
 		else{
@@ -60,6 +61,7 @@ public class ProjectService {
 		
 		projectDao.deleteById(Integer.parseInt(req.params(":id")));
 		
+		resp.body("{\"success\": true}");
 		resp.status(200);
 	}
 	
@@ -73,6 +75,7 @@ public class ProjectService {
 		project.setId(Integer.parseInt(req.params(":id")));
 		
 		projectDao.update(project);
+		resp.body("{\"success\": true}");
 		resp.status(200);
 		
 	}

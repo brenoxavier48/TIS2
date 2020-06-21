@@ -16,14 +16,14 @@ public class TaskService {
 	
 	TaskDao taskDao;
 	
-	public List<Task> findUserTasks(Request req, Response resp){
+	public List<Task> findProjectTasks(Request req, Response resp){
 		
+		Gson gson = new Gson();
 		taskDao = DaoFactory.createTaskDao();
 		
-		User user = new User();
-		user.setId(Integer.parseInt(req.queryParams("userid")));
-		
-		List<Task> listReturn = taskDao.findByUser(user);
+		Project project = gson.fromJson(req.body(), Project.class);
+		System.out.println(project);
+		List<Task> listReturn = taskDao.findByProject(project);
 		
 		return listReturn;	
 	}
