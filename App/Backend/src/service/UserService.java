@@ -6,6 +6,10 @@ import model.entities.User;
 import spark.Request;
 import spark.Response;
 
+import org.omg.CORBA.AnyHolder;
+
+import com.google.gson.Gson;
+
 
 public class UserService {
 	
@@ -13,13 +17,11 @@ public class UserService {
 	
 	public User findUser(Request req, Response resp){
 		
+		Gson gson = new Gson();
 		userDao = DaoFactory.createUserDao();
 		
-			
-		User user = new User();
-		user.setNome(req.queryParams("nome"));
-		user.setSenha(req.queryParams("senha"));
-		
+		User user = gson.fromJson(req.body(), User.class);
+		System.out.println(user);
 		User userReturn = userDao.find(user);
 		
 		if(userReturn != null){
@@ -30,17 +32,23 @@ public class UserService {
 	}
 	
 	public void insertUser(Request req, Response resp){
-		
+		Gson gson = new Gson();
 		userDao = DaoFactory.createUserDao();
 		
+		User user = gson.fromJson(req.body(), User.class);
+		System.out.println(user);
+		System.out.println(req.body());
 		
-		User user = new User();
-		user.setNome(req.queryParams("nome"));
-		user.setSenha(req.queryParams("senha"));
+		int id = userDao.insert(user);
 		
-		userDao.insert(user);
-		
-		resp.status(201);
+		if(id > 0){
+			resp.body("{\"success\": true, \"id\": \""+id+"\"}");
+			resp.status(201);
+		}
+		else{
+			resp.body("{\"success\": false}");
+			resp.status(200);
+		}
 	}
 	
 	

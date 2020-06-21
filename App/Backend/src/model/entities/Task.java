@@ -13,16 +13,18 @@ public class Task implements Serializable{
 	private String nome;
 	private String descricao;
 	private String status;
+	private Project project;
 	private User user;
 	
 	public Task(){
 	}
 	
-	public Task(int id, String nome, String descricao, String status, User user) {
+	public Task(int id, String nome, String descricao, String status, Project project, User user) {
 		this.id = id;
 		this.nome = nome;
 		this.descricao = descricao;
 		this.status = status;
+		this.project = project;
 		this.user = user;
 	}
 
@@ -58,6 +60,14 @@ public class Task implements Serializable{
 		this.status = status;
 	}
 
+	public Project getProject() {
+		return project;
+	}
+
+	public void setProject(Project project) {
+		this.project = project;
+	}
+
 	public User getUser() {
 		return user;
 	}
@@ -90,8 +100,8 @@ public class Task implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Task [id=" + id + ", nome=" + nome + ", descricao=" + descricao + ", status=" + status + ", user="
-				+ user + "]";
+		return "Task [id=" + id + ", nome=" + nome + ", descricao=" + descricao + ", status=" + status + ", project="
+				+ project + ", user=" + user + "]";
 	}
 
 }
